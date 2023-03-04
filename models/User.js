@@ -1,12 +1,27 @@
-// FROM ACTIVITY 22
-const { Schema, model } = require('mongoose');
+// FROM MINI PROJECT & ACTIVITY 22
 
-// Schema to create User model
+const { Schema, model } = require('mongoose');
+const assignmentSchema = require('./Assignment');
+
+// Schema to create Student model
 const userSchema = new Schema(
   {
-    first: String,
-    last: String,
-    age: Number,
+    first: {
+      type: String,
+      required: true,
+      max_length: 50,
+    },
+    last: {
+      type: String,
+      required: true,
+      max_length: 50,
+    },
+    github: {
+      type: String,
+      required: true,
+      max_length: 50,
+    },
+    assignments: [assignmentSchema],
   },
   {
     // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
@@ -15,6 +30,7 @@ const userSchema = new Schema(
       virtuals: true,
     },
     id: false,
+    getters: true,
   }
 );
 
