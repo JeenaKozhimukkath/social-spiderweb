@@ -1,27 +1,32 @@
-// FROM MINI PROJECT & ACTIVITY 22
-
 const { Schema, model } = require('mongoose');
-const assignmentSchema = require('./Assignment');
 
 // Schema to create Student model
 const userSchema = new Schema(
   {
-    first: {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      trimmed: true,
+    },
+    email: {
       type: String,
       required: true,
-      max_length: 50,
+      unique: true,
+      match: [/.+@.+\..+/, 'must match an email address'],
     },
-    last: {
-      type: String,
-      required: true,
-      max_length: 50,
-    },
-    github: {
-      type: String,
-      required: true,
-      max_length: 50,
-    },
-    assignments: [assignmentSchema],
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thoughts',
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
@@ -36,19 +41,13 @@ const userSchema = new Schema(
 
 // Create a virtual property `commentCount` that gets the amount of comments per user
 userSchema
-  .virtual('fullName')
+  .virtual('friendCount')
   // Getter
   .get(function () {
-    return `${this.first} ${this.last}`;
+    return this.friends.length;
   })
-  // Setter to set the first and last name
-  .set(function (v) {
-    const first = v.split(' ')[0];
-    const last = v.split(' ')[1];
-    this.set({ first, last });
-  });
 
 // Initialize our User model
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
