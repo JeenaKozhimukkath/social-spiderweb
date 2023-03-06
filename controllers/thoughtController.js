@@ -1,24 +1,4 @@
-const { ObjectId } = require('mongoose').Types;
 const { Thought, User } = require('../models');
-
-// Aggregate function for getting the overall grade using $avg
-// const grade = async (thoughtId) =>
-//   Student.aggregate([
-//     // only include the given student by using $match
-//     { $match: { _id: ObjectId(reactionId) } },
-//     {
-//       $unwind: '$reaction',
-//     },
-//     {
-//       $group: {
-//         _id: ObjectId(reactionId),
-//         reactionBody: '$reaction.reactionBody',
-//         reactionUser: '$reaction.username',
-//         reactionTime: '$reaction.createdAt',
-
-//       },
-//     },
-//   ]);
 
 module.exports = {
     // Get all thoughts
@@ -47,7 +27,7 @@ module.exports = {
                     { new: true }
                 );
             })
-            .then((user) => 
+            .then((user) =>
                 !user
                     ? res
                         .status(404)
@@ -61,13 +41,12 @@ module.exports = {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $set: req.body },
-            { runValidators: true, new: true}
-            )
-            .then((thought) => 
+            { runValidators: true, new: true }
+        )
+            .then((thought) =>
                 !thought
-                ? res
-                .status(404).json({ message: 'No thought found with that ID' })
-            : res.json(thought)
+                    ? res.status(404).json({ message: 'No thought found with that ID' })
+                    : res.json(thought)
             )
             .catch((err) => res.status(500).json(err));
     },
@@ -78,7 +57,7 @@ module.exports = {
                 !thought
                     ? res.status(404).json({ message: 'No thought with this id exists' })
                     : User.findOneAndUpdate(
-                        { thoughts: req.params.thoughtId },
+                        { thought: req.params.thoughtId },
                         { $pull: { thoughts: req.params.thoughtId } },
                         { new: true }
                     )
@@ -99,8 +78,7 @@ module.exports = {
         )
             .then((thought) =>
                 !thought
-                    ? res
-                        .status(404).json({ message: 'No thought found with that ID!' })
+                    ? res.status(404).json({ message: 'No thought found with that ID!' })
                     : res.json(thought)
             )
             .catch((err) => res.status(500).json(err));

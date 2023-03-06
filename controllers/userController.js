@@ -1,4 +1,4 @@
-const { User, Thought } = require('../models'); 
+const { User, Thought } = require('../models');
 
 module.exports = {
   // Get all users
@@ -28,14 +28,21 @@ module.exports = {
   },
   // update a user by id
   updateUser(req, res) {
-    User.findOneAndUpdate({ _id: req.params.userId })
-      .then((user) => res.json(user))
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user found with that ID' })
+          : res.json(user)
+      )
       .catch((err) => res.status(500).json(err));
   },
-
   // delete a user & associate thoughts by id
   deleteUser(req, res) {
-    User.findOneAndDelete({ _id: req.params.userId })
+    User.findOneAndRemove({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
@@ -44,21 +51,16 @@ module.exports = {
       .then(() => res.json({ message: 'User and associated thoughts deleted!' }))
       .catch((err) => res.status(500).json(err));
   },
-
   // Add a new friend to a user's friend list
   addFriend(req, res) {
-    console.log('You are adding an assignment');
-    console.log(req.body);
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { assignments: req.body } },
+      { $addToSet: { friend: req.body } },
       { runValidators: true, new: true }
     )
       .then((user) =>
         !user
-          ? res
-            .status(404)
-            .json({ message: 'No user found with that ID :(' })
+          ? res.status(404).json({ message: 'No user found with that ID!' })
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
