@@ -20,6 +20,6 @@
   "homepage": "https://github.com/MadelineLowes/social-spiderweb#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.0.0"
+    "mongoose": "^7.0.1"
   }
 }
