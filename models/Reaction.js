@@ -6,6 +6,12 @@ const reactionSchema = new Schema(
             type: Schema.Types.ObjectId,
             default: () => new Types.ObjectId()
         },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            
+            // $get: new Date().toLocaleDateString('en-us', { year:"numeric", month:"short"})
+        },
         reactionBody: {
             type: String,
             required: true,
@@ -14,10 +20,6 @@ const reactionSchema = new Schema(
         username: {
             type: String,
             required: true
-        },
-        createAt: {
-            type: Date,
-            date: Date.now
         }
     },
     {

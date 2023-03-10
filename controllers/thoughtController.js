@@ -10,8 +10,8 @@ module.exports = {
     // Get a single thought by id
     getSingleThought(req, res) {
         Thought.findOne({ _id: req.params.thoughtId })
-            .select('-__v')
-            .populate('reaction')
+            // .select('-__v')
+            // .populate('reaction')
             .then((thought) =>
                 !thought
                     ? res.status(404).json({ message: 'No thought with that ID' })
@@ -25,7 +25,7 @@ module.exports = {
             .then((thought) => {
                 return User.findOneAndUpdate(
                     { _id: req.params.userId },
-                    { $addToSet: { thought: thought._id } }, //$addToSet or PUSH??
+                    { $addToSet: { thought: thought._id } },
                     { new: true }
                 );
             })
@@ -64,8 +64,8 @@ module.exports = {
             )
             .then((user) =>
                 !user
-                    ? res.status(404).json({ message: 'Thought deleted, but the thoughts user not found' })
-                    : res.json({ message: 'Thought successfully deleted' })
+                    ? res.status(404).json({ message: 'Thought deleted but no user with this ID' })
+                    : res.json({ message: 'Thought successfully deleted!' })
             )
             .catch((err) => res.status(500).json(err));
     },
