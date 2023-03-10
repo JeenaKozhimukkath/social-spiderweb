@@ -1,12 +1,11 @@
 const connection = require('../config/connection');
-const { User, Thought, Reaction } = require('../models');
+const { User, Thought } = require('../models');
 
 connection.on('error', (err) => err);
 
 connection.once('open', async () => {
     console.log('connected');
     // Delete the entries in the collection
-    await Reaction.deleteMany({});
     await Thought.deleteMany({});
     await User.deleteMany({});
 
@@ -92,42 +91,56 @@ connection.once('open', async () => {
         {
             "username": "alexB123",
             "email": "alexB123@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         },
         {
             "username": "camD456",
             "email": "camD456@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         },
         {
             "username": "eveF789",
             "email": "eveF789@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
+        },
+        {
+            "username": "guillameH123",
+            "email": "guillameH123@test.com",
+            "thought": [],
+            "friend": []
         },
         {
             "username": "iliaJ456",
             "email": "iliaJ456@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         },
         {
             "username": "kodyL789",
             "email": "kodyL789@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         },
         {
             "username": "macyN123",
             "email": "macyN123@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         },
         {
-            "username": "ophelia456",
-            "email": "ophelia456@test.com",
-            "thought": []
+            "username": "opheliaP456",
+            "email": "opheliaP456@test.com",
+            "thought": [],
+            "friend": []
         },
         {
             "username": "quinR789",
             "email": "quinR789@test.com",
-            "thought": []
+            "thought": [],
+            "friend": []
         }
     ]
     
@@ -147,14 +160,17 @@ connection.once('open', async () => {
         }
     }
 
-    await User.collection.insertMany(user);
     await Thought.collection.insertMany(thought);
-    await Reaction.collection.insertMany(reaction);
+    await User.collection.insertMany(user);
 
     // Log out a table for users, thoughts and reactions
+    console.log("======================")
     console.table(user);
+    console.log("======================")
     console.table(thought);
+    console.log("======================")
     console.table(reaction);
+    console.log("======================")
     console.info('Seeding complete! 🌱');
     process.exit(0);
 });
